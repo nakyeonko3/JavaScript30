@@ -56,36 +56,25 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-      const keys = document.querySelector('.keys');
-      const audio = document.querySelectorAll('audio');
-
-      keys.addEventListener('click', (event) => {
-        const { target } = event;
-        if (
-          target.parentNode.dataset.key === undefined &&
-          target.dataset.key == undefined
-        )
-          return;
-        console.log(target.parentNode.dataset.key);
-        if (target.parentNode.dataset.key === '65') audio[0].play();
-        if (target.dataset.key === '65') audio[0].play();
-        if (target.parentNode.dataset.key === '83') audio[1].play();
-        if (target.dataset.key === '83') audio[1].play();
-        if (target.parentNode.dataset.key === '68') audio[2].play();
-        if (target.dataset.key === '68') audio[2].play();
-        if (target.parentNode.dataset.key === '70') audio[3].play();
-        if (target.dataset.key === '70') audio[3].play();
-        if (target.parentNode.dataset.key === '71') audio[4].play();
-        if (target.dataset.key === '71') audio[4].play();
-        if (target.parentNode.dataset.key === '72') audio[5].play();
-        if (target.dataset.key === '72') audio[5].play();
-        if (target.parentNode.dataset.key === '74') audio[6].play();
-        if (target.dataset.key === '74') audio[6].play();
-        if (target.parentNode.dataset.key === '75') audio[7].play();
-        if (target.dataset.key === '75') audio[7].play();
-        if (target.parentNode.dataset.key === '76') audio[8].play();
-        if (target.dataset.key === '76') audio[8].play();
+      window.addEventListener('keydown', playSound);
+      const keys = document.querySelectorAll('.key');
+      keys.forEach((key) => {
+        key.addEventListener(`transitionend`, removeTransition);
       });
+
+      function playSound(e) {
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+        if (audio === null) return;
+        audio.currentTime = 0;
+        audio.play();
+        key.classList.add('playing');
+      }
+
+      function removeTransition(e) {
+        if (e.propertyName !== 'transform') return;
+        e.target.classList.remove('playing');
+      }
     </script>
   </body>
 </html>
